@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+
+public class main {
+
+	private int input_layer_size = 400;
+	private int hidden_layer_size = 25;
+	private int output_layer_size = 10;
+	
+	private static ArrayList X = new ArrayList();
+	
+	public static void main(String[] args) {
+		String filePath="/home/erik/Downloads/MachineLearning/mlclass-ex4-005-folder/mlclass-ex4-005/mlclass-ex4/ex4data1.txt";
+		
+		try {
+			InputStream ips=new FileInputStream(filePath);
+			InputStreamReader ipsr=new InputStreamReader(ips);
+			BufferedReader br=new BufferedReader(ipsr);
+			
+			while(br.readLine() != null){
+				X.add(br.readLine());
+				System.out.println(br.readLine());
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

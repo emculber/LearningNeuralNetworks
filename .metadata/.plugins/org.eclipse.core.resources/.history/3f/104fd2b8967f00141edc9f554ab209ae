@@ -1,0 +1,49 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+
+public class LoadData {
+
+	public int[][] loadData(String filePath, int amount, int dataAmount, int start, int end)
+	{
+		System.out.println("Starting process to load Data");
+		String loadedData="";
+		int[][] loadedDataArray = new int[amount][dataAmount];
+		try {
+			InputStream ips=new FileInputStream(filePath);
+			InputStreamReader ipsr=new InputStreamReader(ips);
+			BufferedReader br=new BufferedReader(ipsr);
+
+			System.out.println("load Data");
+			int count=0;
+			while(br.readLine() != null){
+				loadedData += br.readLine();
+				count++;
+				System.out.print("Loaded count: "+count+"");
+				//System.out.println(br.readLine());
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("converting Data");
+		String[] splitData=loadedData.split(" ");
+		for(int i=start; i<end; i++)
+		{
+			for(int j=0; j<dataAmount; j++)
+			{
+				loadedDataArray[i-start][j] = Integer.parseInt(splitData[(i*dataAmount)+j]);
+			}
+		}
+		return loadedDataArray;
+	}
+}

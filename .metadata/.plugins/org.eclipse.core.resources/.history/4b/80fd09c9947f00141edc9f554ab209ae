@@ -1,0 +1,18 @@
+public class main {
+
+	private int input_layer_size = 400;
+	private int hidden_layer_size = 25;
+	private int output_layer_size = 10;
+	private String filePath="/home/erik/Downloads/MachineLearning/mlclass-ex4-005-folder/mlclass-ex4-005/mlclass-ex4/";
+	private int[][] X;
+	
+	public static void main(String[] args) {
+		main m = new main();
+	}
+
+	private void StartProgram()
+	{
+		LoadData loadData = new LoadData();
+		X = loadData.loadData(filePath + "ex4data1.txt", 5000, 400, 0, 5000);
+	}
+}

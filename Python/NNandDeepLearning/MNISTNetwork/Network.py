@@ -34,6 +34,10 @@ class Network():
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
         self.weights = [np.random.randn(y, x) 
                         for x, y in zip(sizes[:-1], sizes[1:])]
+        print "number of layers = ", self.num_layers
+        print "size of each layer = ", self.sizes
+        print "biases = ", self.biases
+        print "weights = ", self.weights
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""

@@ -62,16 +62,13 @@ class LogisticRegression(object):
         f = theano.function([x, w, b], y)
 
 
-        #self.p_y_given_x = T.nnet.softmax(T.dot(input, self.W) + self.b)
+        self.p_y_given_x = T.nnet.softmax(T.dot(input, self.W) + self.b)
 ##################################
         self.y_pred = T.argmax(self.p_y_given_x, axis=1)
         self.params = [self.W, self.b]
         print 'size inputs', n_in, 'size output', n_out
         print 'printing Weights\n', self.W.get_value()
         print 'printing biases\n', self.b.get_value()
-        print 'printing P(Y|x,W,b)\n', self.p_y_given_x.eval()
-        print 'printing Y Prediction\n', self.y_pred.get_value()
-        print 'printing params\n', self.params.get_value()
 
     def negative_log_likelihood(self, y):
         return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])

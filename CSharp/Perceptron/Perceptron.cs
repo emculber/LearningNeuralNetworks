@@ -69,39 +69,67 @@ namespace Perceptrons
 
     public static int StepFunction(double x) 
     {
-      if(x>0.5) return 1; //if x is > 0.5 then the neuron fires or is activated
-      else return 0; //else it does not fire or activate
+      if(x>0.5)
+      {
+        Console.WriteLine(x + ":Activated");
+        return 1; //if x is > 0.5 then the neuron fires or is activated
+      }
+      else
+      {
+        Console.WriteLine(x + ":Not Active");
+        return 0; //else it does not fire or activate
+      }
     }
 
     public static int ComputeOutput(int[] trainVector, double[] weights, double bias) 
     {
       Console.WriteLine("Computing Output");
       double dotP = 0.0;
-      for(int j = 0; j < trainVector.Length - 1; j++) //trainVector assumes that there is an extra value for the label so it subtracts one from the total so the value is not included in the sum 
+      Console.WriteLine("==========================");
+      for(int j = 0; j < trainVector.Length - 1; j++) //trainVector assumes that there is an extra value for the label so it subtracts one from the total so the value is not included in the sum
+      {
         dotP += (trainVector[j] * weights[j]); //sums of all the inputs * the weights of each input
+        Console.WriteLine("dotP += (input * Weight) :: " + dotP + "+=" + trainVector[j] + "*" + weights[j]);
+      }
       dotP += bias; //Add the bias to the total sum of the weights
+      Console.WriteLine("dotP += bias :: " + dotP + "+=" + bias);
+      Console.WriteLine("==========================");
       return StepFunction(dotP); //This is the activation Function
     }
 
     public static int Predict(int[] dataVector, double[] bestWeights, double bestBias) 
     {
+      Console.WriteLine("Predict");
       //This function is almost the same as computeOutput except it does not have and embedded desired value
       double dotP = 0.0;
+      Console.WriteLine("==========================");
       for(int j = 0; j < dataVector.Length; j++) 
+      {
         dotP += (dataVector[j] * bestWeights[j]); //sums of all the inputs * the weights of each input
+        Console.WriteLine("dotP += (input * Best Weight) :: " + dotP + "+=" + dataVector[j] + "*" + bestWeights[j]);
+      }
       dotP += bestBias; //Add the bias to the total sum of the weights
+      Console.WriteLine("dotP += best bias :: " + dotP + "+=" + bestBias);
+      Console.WriteLine("==========================");
       return StepFunction(dotP); //This is the activation Function
     }
 
     public static double TotalError(int[][] trainingData, double[] weights, double bias) 
     { 
+      Console.WriteLine("Calc Total Error");
       double sum = 0.0; //sum of the error
+      Console.WriteLine("==========================");
       for (int i = 0; i < trainingData.Length; ++i) //looping though the training set
       {
         int desired = trainingData[i][trainingData[i].Length - 1]; //gets the desired output
         int output = ComputeOutput(trainingData[i], weights, bias);//computes the output with the wights and bias
         sum += (desired - output) * (desired - output); //sum of the squared differences between the ouput and the computed output
+        Console.WriteLine("Desired output=" + desired);
+        Console.WriteLine("Output=" + output);
+        Console.WriteLine("sum += (desired - output)^2 :: " + "(desired-output)=" + (desired-output) + " :: " + sum + "+=" + (desired-output)*(desired-output));
       }
+      Console.WriteLine("half the sum :: " + (0.5*sum));
+      Console.WriteLine("==========================");
       return 0.5 * sum; //one half of the sum
     }
 
@@ -112,25 +140,52 @@ namespace Perceptrons
       double bias = 0.05; //arbitrary value to initalize the bias value
       double totalError = double.MaxValue; //setting totalError to max value a double can be
       int epoch = 0; //Counter for the loop epoch
-
+      
+      Console.WriteLine("Finding Best Weights with dim=" + dim + ", weights=");
+      ShowVector(weights);
+      Console.WriteLine("bias=" + bias + ", Total Error=" + totalError + ", epoch=" + epoch);
       while(epoch < maxEpochs && totalError > targetError) //Loop exits either if epoch is < maxEpochs or total error is > targetError
       {
+        Console.WriteLine("epoch=" + epoch + "/" + maxEpochs + "Total Error=" + totalError);
+      Console.WriteLine("==========================");
         for (int i = 0; i < trainingData.Length; i++) //Looping though all the training sets
         {
           int desired = trainingData[i][trainingData[i].Length - 1]; //gets the expected label of the training set
           int output = ComputeOutput(trainingData[i], weights, bias); //computes the output of the training set
           int delta = desired - output; //gets the delta value either 1 or -1 if the prediction was wrong and 0 if it was right
 
+          Console.WriteLine("Desired Output=" + desired);
+          Console.WriteLine("Output=" + output);
+          Console.WriteLine("delta=desired-output=" + delta);
+      Console.WriteLine("==========================");
           for (int j = 0; j < weights.Length; j++) //Looping though all the weights
+          {
+      Console.WriteLine("      ==========================");
+            Console.WriteLine("Weight=Weight+(alpha*delta*input");
+            Console.WriteLine("Current Weight=" + weights[j]);
             weights[j] = weights[j]+(alpha * delta * trainingData[i][j]); //adjusting the weights for each input
+            Console.WriteLine("alpha/delta/input = " + alpha + "/" + delta + "/" + trainingData[i][j]);
+            Console.WriteLine("New Weight=" + weights[j]);
+      Console.WriteLine("      ==========================");
+          }
+      Console.WriteLine("==========================");
 
+          Console.WriteLine("bias=bias+(alpha*delta)");
+          Console.WriteLine("Current Bias=" + bias);
           bias = bias + (alpha * delta); //adjusting the bias for the neuron
+          Console.WriteLine("alpha/delta" + alpha + "/" + delta);
+          Console.WriteLine("new bias=" + bias);
         }
-
+        
+      Console.WriteLine("==========================");
         totalError = TotalError(trainingData, weights, bias);//calculating the total Error with the current Weights and Bias
+        Console.WriteLine("Total Error=" + totalError);
         epoch++; //Increasing count
       }
       bestBias = bias; //Setting best Bias
+      Console.WriteLine("\nreturning new Weights and bias :: ");
+      ShowVector(weights);
+      Console.WriteLine(":" + bestBias);
       return weights;
     }
 
